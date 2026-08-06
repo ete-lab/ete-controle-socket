@@ -1,7 +1,7 @@
 #include <winsock.h>
 #include <stdio.h>
 #include <string.h>
-#include "modulos_camac.h" // Inclui o nosso novo arquivo
+#include "comum.h" // Inclui o nosso novo arquivo
 
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
@@ -12,18 +12,60 @@ void processarSequencia(const char *dados, SOCKET cliente) {
     if (strstr(dados, "TESTE_MODULOS") != NULL) {
 		int station_para_teste = 4;
 		printf("**Entrou no if de TESTE MODULOS");
-        
 		printf("** chama executarTesteModulos(4)");
         executarTesteModulos(station_para_teste);
         printf("** sai do modulo executarTesteModulos(4)");
 		printf("** resposta = %s\n", resposta);
-        sprintf(resposta, "OK! Teste de modulos executado na estacao %d.\n", station_para_teste);
-    } 
-    else if (strcmp(dados, "FECHAR_PORTA") == 0) {
-        sprintf(resposta, "OK! Porta fechada.\n");
+        sprintf(resposta,
+			"HTTP/1.1 200 OK\r\n"
+            "Content-Type: application/json; charset=utf-8\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+            "{\n"
+            "  \"status\": \"sucesso\",\n"
+            "  \"comando\": \"TESTE_MODULOS\",\n"
+            "  \"estacao\": %d,\n"
+            "  \"mensagem\": \"Teste executado com sucesso no CAMAC\"\n"
+            "}\n", station_para_teste);
     }
+	else if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
+		printf("** Descarregando bancos**");
+		descarregarBancos();
+		sprintf(resposta,
+			"HTTP/1.1 200 OK\r\n"
+            "Content-Type: application/json; charset=utf-8\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+            "{\n"
+            "  \"status\": \"sucesso\",\n"
+            "  \"comando\": \"FECHAR_PORTA\",\n"
+            "  \"mensagem\": \"Porta fechada com sucesso\"\n"
+            "}\n");
+
+	}
+    else if (strcmp(dados, "") == 0) {
+        sprintf(resposta,
+			"HTTP/1.1 200 OK\r\n"
+            "Content-Type: application/json; charset=utf-8\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+            "{\n"
+            "  \"status\": \"sucesso\",\n"
+            "  \"comando\": \"FECHAR_PORTA\",\n"
+            "  \"mensagem\": \"Porta fechada com sucesso\"\n"
+            "}\n");
+    }
+	
     else {
-        sprintf(resposta, "ERRO: Comando desconhecido.\n");
+        sprintf(resposta,
+			"HTTP/1.1 400 Bad Request\r\n"
+            "Content-Type: application/json; charset=utf-8\r\n"
+            "Connection: close\r\n"
+            "\r\n"
+            "{\n"
+            "  \"status\": \"erro\",\n"
+            "  \"mensagem\": \"Comando desconhecido\"\n"
+            "}\n");
     }
 
     send(cliente, resposta, (int)strlen(resposta), 0);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <esone.h>
-#include "modulos_camac.h"
+#include "comum.h"
 #include <windows.h>
 
 void executarTesteModulos(int n) {
@@ -8,7 +8,7 @@ void executarTesteModulos(int n) {
     int sa = 0, q;
     short i, j, k;
     struct camac_ext ext;
-
+ 
     printf("Test for CFSA (Estacao: %d)...\n", n);
 
     ccinit();
