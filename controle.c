@@ -1,7 +1,9 @@
 #include <winsock.h>
 #include <stdio.h>
 #include <string.h>
-#include "comum.h" // Inclui o nosso novo arquivo
+#include "comum.h" 
+
+int banco[3] = {1,2,3};
 
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
@@ -29,8 +31,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
             "}\n", station_para_teste);
     }
 	else if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
-		printf("** Descarregando bancos**");
-		descarregarBancos();
+		descarregarBancos(banco, totalBancos);
 		sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
@@ -38,8 +39,8 @@ void processarSequencia(const char *dados, SOCKET cliente) {
             "\r\n"
             "{\n"
             "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"FECHAR_PORTA\",\n"
-            "  \"mensagem\": \"Porta fechada com sucesso\"\n"
+            "  \"comando\": \"DESCARREGAR_BANCOS\",\n"
+            "  \"mensagem\": \"Chave de descarga do banco acionada.\"\n"
             "}\n");
 
 	}

@@ -1,10 +1,14 @@
 #include <stdio.h>
+#include <string.h>
 #include <esone.h>
 #include "comum.h"
 
-void descarregarBancos(){
-	printf("**** Descarregando bancos");
-	printf("** Levantando todas as chaves");
-	printf("** Aterrando os bancos");
-	printf("** fim da operação");
+extern struct camac_ext ext;
+
+void descarregarBancos(int banco){
+	printf("\n**** Descarregando banco .\n");
+	//subir todos as chaves facão
 }
+
+
+
