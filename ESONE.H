@@ -71,7 +71,7 @@ DESCRIPTION:
 /****************************************************************************/
 /* Include the function code, error code and structure definitions          */
 
-#include <iml.h>
+#include "iml.h"
 
 /* PROTOTYPES for ESONE CAMAC functions                                     */
 
@@ -101,8 +101,7 @@ DESCRIPTION:
 	void __declspec(dllexport) _stdcall ctgl  ( struct camac_ext* ,int*);
 	void __declspec(dllexport) _stdcall ctlm  ( struct camac_lam* ,int*);
 	void __declspec(dllexport) _stdcall ctstat( int* );
-
 	void __cdecl clcnt( long*);
 	void __cdecl clwait();
 
-
+	

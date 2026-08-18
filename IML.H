@@ -65,4 +65,3 @@ struct camac_lam
 	int     a;
 	int     inta[2];
 };
-

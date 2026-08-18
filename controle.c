@@ -1,23 +1,23 @@
 #include <winsock.h>
 #include <stdio.h>
 #include <string.h>
-#include "comum.h" 
+#include "comum.h"
+#include "esone.h"
 
-int banco[3] = {1,2,3};
+struct camac_ext ext;
 
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
     char resposta[512];
-    
+
     printf("Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
 
     if (strstr(dados, "TESTE_MODULOS") != NULL) {
 		int station_para_teste = 4;
 		printf("**Entrou no if de TESTE MODULOS");
-		printf("** chama executarTesteModulos(4)");
-        executarTesteModulos(station_para_teste);
-        printf("** sai do modulo executarTesteModulos(4)");
-		printf("** resposta = %s\n", resposta);
+		printf("**chama executarTesteModulos(4)");
+        printf("**sai do modulo executarTesteModulos(4)");
+		printf("**resposta = %s\n", resposta);
         sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
@@ -31,7 +31,6 @@ void processarSequencia(const char *dados, SOCKET cliente) {
             "}\n", station_para_teste);
     }
 	else if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
-		descarregarBancos(banco, totalBancos);
 		sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"

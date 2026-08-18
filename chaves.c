@@ -1,19 +1,22 @@
 #include <stdio.h>
 #include <string.h>
-#include <esone.h>
 #include <conio.h>
 #include "comum.h"
+#include "esone.h"
 
 int subAdress = 0;
 int qx =0;
 int funcao = 0;
 short shortData;
+int branchAux = BRANCH;
+int crateAux = CRATE;
+int moduloRele219 = MODULO_RELE_219;
 
 void levantarChave(int banco){
-	cdreg(&ext, &branch, &crate, &moduloRele219, &subAdress);
+	cdreg(&ext, &branchAux, &crateAux, &moduloRele219, &subAdress);
 	shortData = 0x0883; //mantem hv off e desacopla os bancos
 	
-	funcao = 16; //f16 escreve no registro do módulo 219
+	funcao = 16; 
 	cssa(&funcao, &ext, &shortData, &qx);
 
 	funcao = 25; //f25 carrega registrador e o executa
@@ -21,10 +24,10 @@ void levantarChave(int banco){
 }
 
 void baixarChave(int banco){
-	cdreg(&ext, &branch, &crate, &moduloRele219, &subAdress);
-	shortData = 0x0883; //mantem hv off e desacopla os bancos
+	cdreg(&ext, &branchAux, &crateAux, &moduloRele219, &subAdress);
+	shortData = 0x0883; 
 	
-	funcao = 16; //f16 escreve no registro do módulo 219
+	funcao = 16; 
 	cssa(&funcao, &ext, &shortData, &qx);
 
 	funcao = 25; //f25 carrega registrador e o executa
