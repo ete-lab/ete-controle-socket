@@ -79,9 +79,13 @@ int main() {
     int addrLen;
     char buffer[1024];
     int bytesLidos;
+    int true = 1;
+    int false = 0;
+    int retorno = 9;
+
 
     addrLen = sizeof(clienteAddr);
-
+    cccz(&ext);
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         printf("Falha ao inicializar Winsock.\n");
         return 1;
