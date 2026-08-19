@@ -4,7 +4,7 @@
 # Object files
 *.o
 *.ko
-*.obj
+# *.obj
 *.elf
 
 # Linker output
@@ -17,13 +17,13 @@
 *.pch
 
 # Libraries
-*.lib
+# *.lib
 *.a
 *.la
 *.lo
 
 # Shared objects (inc. Windows DLLs)
-*.dll
+# *.dll
 *.so
 *.so.*
 *.dylib
@@ -54,3 +54,6 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# build configuration files
+.vscode
