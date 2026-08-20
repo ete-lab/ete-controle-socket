@@ -88,9 +88,10 @@ int main() {
     ccinit();
     //cccz(&ext); //inicializa camac
     cccc(&ext); //limpa o crate
-    ccci(&ext, &false); // false = bloqueio retirado. true = bloqueio ativado 
+    
+    ccci(&ext, &true); // false = bloqueio retirado. true = bloqueio ativado 
+    ctci(&ext, &retorno);
 
-    //ctci(&ext, &retorno);
     if(retorno) printf("\nDataway inhibit nabled - retorno = %d .", retorno);
     else printf("\nDataway inhibit disabled - retorno = %d .", retorno);
 
