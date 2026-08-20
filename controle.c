@@ -82,10 +82,28 @@ int main() {
     int true = 1;
     int false = 0;
     int retorno = 9;
-
-
+    int state;
     addrLen = sizeof(clienteAddr);
-    cccz(&ext);
+
+    ccinit();
+    //cccz(&ext); //inicializa camac
+    cccc(&ext); //limpa o crate
+    ccci(&ext, &false); // false = bloqueio retirado. true = bloqueio ativado 
+
+    //ctci(&ext, &retorno);
+    if(retorno) printf("\nDataway inhibit nabled - retorno = %d .", retorno);
+    else printf("\nDataway inhibit disabled - retorno = %d .", retorno);
+
+    ctstat(&state);
+    printf("\r\n\nValor do state: %d .", state);
+    printf("\nstate value - meaning");
+    printf("\n0           - Q=1, X=1");
+    printf("\n1           - Q=0, X=1");
+    printf("\n2           - Q=1, X=0");
+    printf("\n3           - Q=0, X=0\r\n");
+
+     
+
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         printf("Falha ao inicializar Winsock.\n");
         return 1;
