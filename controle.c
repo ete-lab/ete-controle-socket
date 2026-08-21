@@ -9,10 +9,14 @@ struct camac_ext ext;
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
     char resposta[512];
+    int set = 1;
+    int clear = 0;
 
-    printf("Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
+    printf("\r\n**** Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
 
-    if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
+    if (strstr(dados, "DESINIBIR") != NULL) {
+        inhibt(&clear);
+
 		sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
@@ -25,7 +29,8 @@ void processarSequencia(const char *dados, SOCKET cliente) {
             "}\n");
 
 	}
-    else if (strcmp(dados, "") == 0) {
+    else if (strstr(dados, "INIBIR") != NULL) {
+        inhibt(&set);
         sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
@@ -36,9 +41,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
             "  \"comando\": \"FECHAR_PORTA\",\n"
             "  \"mensagem\": \"Porta fechada com sucesso\"\n"
             "}\n");
-    }
-	
-    else {
+    } else {
         sprintf(resposta,
 			"HTTP/1.1 400 Bad Request\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
