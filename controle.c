@@ -12,25 +12,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
 
     printf("Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
 
-    if (strstr(dados, "TESTE_MODULOS") != NULL) {
-		int station_para_teste = 4;
-		printf("**Entrou no if de TESTE MODULOS");
-		printf("**chama executarTesteModulos(4)");
-        printf("**sai do modulo executarTesteModulos(4)");
-		printf("**resposta = %s\n", resposta);
-        sprintf(resposta,
-			"HTTP/1.1 200 OK\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"TESTE_MODULOS\",\n"
-            "  \"estacao\": %d,\n"
-            "  \"mensagem\": \"Teste executado com sucesso no CAMAC\"\n"
-            "}\n", station_para_teste);
-    }
-	else if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
+    if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
 		sprintf(resposta,
 			"HTTP/1.1 200 OK\r\n"
             "Content-Type: application/json; charset=utf-8\r\n"
@@ -85,25 +67,7 @@ int main() {
     int state;
     addrLen = sizeof(clienteAddr);
 
-    ccinit();
-    //cccz(&ext); //inicializa camac
-    cccc(&ext); //limpa o crate
-    
-    ccci(&ext, &true); // false = bloqueio retirado. true = bloqueio ativado 
-    ctci(&ext, &retorno);
-
-    if(retorno) printf("\nDataway inhibit nabled - retorno = %d .", retorno);
-    else printf("\nDataway inhibit disabled - retorno = %d .", retorno);
-
-    ctstat(&state);
-    printf("\r\n\nValor do state: %d .", state);
-    printf("\nstate value - meaning");
-    printf("\n0           - Q=1, X=1");
-    printf("\n1           - Q=0, X=1");
-    printf("\n2           - Q=1, X=0");
-    printf("\n3           - Q=0, X=0\r\n");
-
-     
+    init(); //inicializa CAMAC
 
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         printf("Falha ao inicializar Winsock.\n");
@@ -129,7 +93,7 @@ int main() {
     }
 
     listen(servidor, 3);
-    printf("Servidor de Hardware (CAMAC) rodando na porta 8080...\n");
+    printf("\nServidor de Hardware (CAMAC) rodando na porta 8080...\n");
 
     while (1) {
         cliente = accept(servidor, (struct sockaddr *)&clienteAddr, &addrLen);
@@ -145,9 +109,9 @@ int main() {
         if (bytesLidos > 0) {
             if (buffer[bytesLidos - 1] == '\n') buffer[bytesLidos - 1] = '\0';
             if (buffer[bytesLidos - 1] == '\r') buffer[bytesLidos - 1] = '\0';
-			printf("chamando processarSequencia");
+			printf("\nchamando processarSequencia");
             processarSequencia(buffer, cliente);
-			printf("finalizado processarSequencia");
+			printf("\nfinalizado processarSequencia\r\n");
         }
 
         closesocket(cliente);

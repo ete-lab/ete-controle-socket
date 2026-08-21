@@ -12,4 +12,5 @@ extern struct camac_ext ext;
 
 void levantarChave(int banco);
 void baixarChave(int banco);
+void init();
 #endif
