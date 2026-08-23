@@ -70,7 +70,7 @@ int main() {
     int state;
     addrLen = sizeof(clienteAddr);
 
-    init(); //inicializa CAMAC
+    //init(); //inicializa CAMAC
 
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         printf("Falha ao inicializar Winsock.\n");
