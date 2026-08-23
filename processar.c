@@ -5,47 +5,37 @@
 
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
-    char resposta[512];
+    char respostaHttp[1024];
+    const char *status;
+    const char *comando;
+    const char *mensagem;
 
     printf("Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
 
     if (strstr(dados, "DESCARREGAR_BANCOS") != NULL) {
-		sprintf(resposta,
-			"HTTP/1.1 200 OK\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"DESCARREGAR_BANCOS\",\n"
-            "  \"mensagem\": \"Chave de descarga do banco acionada.\"\n"
-            "}\n");
-
+		status = "sucesso";
+		comando = "DESCARREGAR_BANCOS";
+		mensagem = "Chave de descarga do banco acionada.";
 	}
     else if (strcmp(dados, "") == 0) {
-        sprintf(resposta,
-			"HTTP/1.1 200 OK\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"FECHAR_PORTA\",\n"
-            "  \"mensagem\": \"Porta fechada com sucesso\"\n"
-            "}\n");
+		status = "sucesso";
+		comando = "FECHAR_PORTA";
+		mensagem = "Porta fechada com sucesso";
     }
-	
     else {
-        sprintf(resposta,
-			"HTTP/1.1 400 Bad Request\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"erro\",\n"
-            "  \"mensagem\": \"Comando desconhecido\"\n"
-            "}\n");
+		status = "erro";
+		comando = "";
+		mensagem = "Comando desconhecido";
     }
 
-    send(cliente, resposta, (int)strlen(resposta), 0);
+	sprintf(respostaHttp,
+		"HTTP/1.1 %s\r\n"
+        "Content-Type: application/json; charset=utf-8\r\n"
+        "Connection: close\r\n"
+        "\r\n"
+        "%s",
+        strcmp(status, "sucesso") == 0 ? "200 OK" : "400 Bad Request",
+        resposta(status, comando, mensagem));
+
+    send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);
 }

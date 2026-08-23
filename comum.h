@@ -12,6 +12,7 @@
 
 extern struct camac_ext ext;
 
+const char *resposta(const char *status, const char *comando, const char *mensagem);
 void processarSequencia(const char *dados, SOCKET cliente);
 void levantarChave(int banco);
 void baixarChave(int banco);
