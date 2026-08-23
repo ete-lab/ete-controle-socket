@@ -6,6 +6,7 @@
 
 struct camac_ext ext;
 
+<<<<<<< HEAD
 // --- PROCESSADOR DE COMANDOS ---
 void processarSequencia(const char *dados, SOCKET cliente) {
     char resposta[512];
@@ -56,6 +57,8 @@ void processarSequencia(const char *dados, SOCKET cliente) {
     send(cliente, resposta, (int)strlen(resposta), 0);
 }
 
+=======
+>>>>>>> 6b4a79c ([2.0.1] Refatorando com IA)
 // --- PROGRAMA PRINCIPAL ---
 int main() {
     WSADATA wsa;

@@ -1,6 +1,8 @@
 #ifndef COMUM_H
 #define COMUM_H
 
+#include <winsock.h>
+
 #define MODULO_RELE_219 9
 #define MODULO_ADC_RAP_506 13
 #define MODULO_ADC_LENTO_4022 4
@@ -10,6 +12,7 @@
 
 extern struct camac_ext ext;
 
+void processarSequencia(const char *dados, SOCKET cliente);
 void levantarChave(int banco);
 void baixarChave(int banco);
 void init();
