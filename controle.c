@@ -6,56 +6,6 @@
 
 struct camac_ext ext;
 
-// --- PROCESSADOR DE COMANDOS ---
-void processarSequencia(const char *dados, SOCKET cliente) {
-    char resposta[512];
-    int set = 1;
-    int clear = 0;
-
-    printf("\r\n**** Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
-
-    if (strstr(dados, "DESINIBIR") != NULL) {
-        inhibt(&clear);
-
-		sprintf(resposta,
-			"HTTP/1.1 200 OK\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"DESCARREGAR_BANCOS\",\n"
-            "  \"mensagem\": \"Chave de descarga do banco acionada.\"\n"
-            "}\n");
-
-	}
-    else if (strstr(dados, "INIBIR") != NULL) {
-        inhibt(&set);
-        sprintf(resposta,
-			"HTTP/1.1 200 OK\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"sucesso\",\n"
-            "  \"comando\": \"FECHAR_PORTA\",\n"
-            "  \"mensagem\": \"Porta fechada com sucesso\"\n"
-            "}\n");
-    } else {
-        sprintf(resposta,
-			"HTTP/1.1 400 Bad Request\r\n"
-            "Content-Type: application/json; charset=utf-8\r\n"
-            "Connection: close\r\n"
-            "\r\n"
-            "{\n"
-            "  \"status\": \"erro\",\n"
-            "  \"mensagem\": \"Comando desconhecido\"\n"
-            "}\n");
-    }
-
-    send(cliente, resposta, (int)strlen(resposta), 0);
-}
-
 // --- PROGRAMA PRINCIPAL ---
 int main() {
     WSADATA wsa;
@@ -70,7 +20,7 @@ int main() {
     int state;
     addrLen = sizeof(clienteAddr);
 
-    //init(); //inicializa CAMAC
+    init(); //inicializa CAMAC
 
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) {
         printf("Falha ao inicializar Winsock.\n");
