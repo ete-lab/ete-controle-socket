@@ -18,4 +18,5 @@ void levantarChave(int banco);
 void baixarChave(int banco);
 void init();
 void inhibt(int *valor);
+int execute(int *funcao, int *subAddress, short *shortData);
 #endif
