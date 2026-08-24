@@ -20,6 +20,6 @@ void init(){
     else printf("\nDataway inhibit disabled - retorno = %d .", retorno);
     ctstat(&estado);
 
-    printf("\r\n\nValor do estado: %d .", estado);
+    printf("\r\n\nValor do estado: %d .\n", estado);
     
 }
