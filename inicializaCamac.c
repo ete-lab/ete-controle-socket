@@ -18,6 +18,7 @@ void init(){
 
     if(retorno) printf("\nDataway inhibit nabled - retorno = %d .", retorno);
     else printf("\nDataway inhibit disabled - retorno = %d .", retorno);
+    
     ctstat(&estado);
 
     printf("\r\n\nValor do estado: %d .\n", estado);
