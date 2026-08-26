@@ -37,7 +37,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
       mensagem = "Bancos Conectados.";
     }
     else if (strstr(dados, "CONECTAR_BANCO_VERTICAL") != NULL) {
-      shortData = 0x0182;
+      shortData = 0x1807;
       subAddress = 0;
 
       retorno = execute(&f_write, &subAddress, &shortData);
