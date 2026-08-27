@@ -14,10 +14,10 @@ int main() {
     int addrLen;
     char buffer[1024];
     int bytesLidos;
-    int true = 1;
-    int false = 0;
-    int retorno = 9;
-    int state;
+    struct parametros parametros;
+    int retorno;
+    char respostaHttp[1024];
+    const char *corpoResposta;
     addrLen = sizeof(clienteAddr);
 
     init(); //inicializa CAMAC
@@ -58,13 +58,36 @@ int main() {
 
         memset(buffer, 0, sizeof(buffer));
         bytesLidos = recv(cliente, buffer, sizeof(buffer) - 1, 0);
-
+        printf("bytes lidos: %d\n", bytesLidos);
         if (bytesLidos > 0) {
             if (buffer[bytesLidos - 1] == '\n') buffer[bytesLidos - 1] = '\0';
             if (buffer[bytesLidos - 1] == '\r') buffer[bytesLidos - 1] = '\0';
-			printf("\nchamando processarSequencia");
-            processarSequencia(buffer, cliente);
-			printf("\nfinalizado processarSequencia\r\n");
+            printf("Extrair parametros \n");
+            if (extrairParametros(buffer, &parametros)) {
+                retorno = executar(
+                    parametros.branch,
+                    parametros.crate,
+                    parametros.station,
+                    parametros.subaddress,
+                    parametros.function,
+                    parametros.data
+                );
+                corpoResposta = resposta("sucesso", "executar", "Comando executado.");
+            } else {
+                retorno = -1;
+                corpoResposta = resposta("erro", "executar", "JSON invalido.");
+            }
+
+            sprintf(respostaHttp,
+                "HTTP/1.1 %s\r\n"
+                "Content-Type: application/json; charset=utf-8\r\n"
+                "Connection: close\r\n"
+                "\r\n"
+                "%s",
+                retorno == -1 ? "400 Bad Request" : "200 OK",
+                corpoResposta
+            );
+            send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);
         }
 
         closesocket(cliente);
