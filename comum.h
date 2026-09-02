@@ -25,8 +25,6 @@ const char *resposta(const char *status, const char *comando, const char *mensag
 void processarSequencia(const char *dados, SOCKET cliente);
 int extrairParametros(const char *json, struct parametros *parametros);
 int executar(int branch, int crate, int station, int subaddress, int function, int data);
-void levantarChave(int banco);
-void baixarChave(int banco);
 void init();
 void inhibt(int *valor);
 int execute(int *funcao, int *subAddress, short *shortData);
