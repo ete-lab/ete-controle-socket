@@ -3,6 +3,7 @@
 #include <string.h>
 #include "comum.h"
 #include "esone.h"
+#include "cJSON.h"
 
 struct camac_ext ext;
 
@@ -13,11 +14,15 @@ int main() {
     struct sockaddr_in servidorAddr, clienteAddr;
     int addrLen;
     char buffer[1024];
+    char json[512];
     int bytesLidos;
     struct parametros parametros;
     int retorno;
     char respostaHttp[1024];
     const char *corpoResposta;
+    int valor = 0;
+
+
     addrLen = sizeof(clienteAddr);
 
     init(); //inicializa CAMAC
@@ -63,7 +68,9 @@ int main() {
             if (buffer[bytesLidos - 1] == '\n') buffer[bytesLidos - 1] = '\0';
             if (buffer[bytesLidos - 1] == '\r') buffer[bytesLidos - 1] = '\0';
             printf("Extrair parametros \n");
-            if (extrairParametros(buffer, &parametros)) {
+            extractJson(buffer, json);
+            printf("[INFO] JSON extraído: %s\n", json);
+            if (extrairParametros(json, &parametros)) {
                 retorno = executar(
                     parametros.branch,
                     parametros.crate,
