@@ -18,13 +18,20 @@ struct parametros {
 	int station;
 	int subaddress;
 	int function;
-	int data;
+	int dataword;
 };
 
-const char *resposta(const char *status, const char *comando, const char *mensagem);
+
+typedef struct{ 
+    short data;
+	short qx;
+} retorno;
+
+
+const char *resposta(const char *status, const char *comando, const char *mensagem, const int data, const int qx);
 void processarSequencia(const char *dados, SOCKET cliente);
 int extrairParametros(const char *json, struct parametros *parametros);
-int executar(int branch, int crate, int station, int subaddress, int function, int data);
+retorno executar(int branch, int crate, int station, int subaddress, int function, int data);
 void init();
 void inhibt(int *valor);
 int execute(int *funcao, int *subAddress, short *shortData);

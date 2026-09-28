@@ -17,7 +17,7 @@ int main() {
     char json[512];
     int bytesLidos;
     struct parametros parametros;
-    int retorno;
+    retorno retornoStrunct;
     char respostaHttp[1024];
     const char *corpoResposta;
     int valor = 0;
@@ -63,26 +63,26 @@ int main() {
 
         memset(buffer, 0, sizeof(buffer));
         bytesLidos = recv(cliente, buffer, sizeof(buffer) - 1, 0);
-        printf("bytes lidos: %d\n", bytesLidos);
+        printf("\n [INFO] Bytes lidos: %d\n", bytesLidos);
         if (bytesLidos > 0) {
             if (buffer[bytesLidos - 1] == '\n') buffer[bytesLidos - 1] = '\0';
             if (buffer[bytesLidos - 1] == '\r') buffer[bytesLidos - 1] = '\0';
-            printf("Extrair parametros \n");
+            printf("\n [INFO] Extrair parametros \n");
             extractJson(buffer, json);
-            printf("[INFO] JSON extraído: %s\n", json);
+            printf("\n [INFO] JSON extraído: %s\n", json);
             if (extrairParametros(json, &parametros)) {
-                retorno = executar(
+                retornoStrunct = executar(
                     parametros.branch,
                     parametros.crate,
                     parametros.station,
                     parametros.subaddress,
                     parametros.function,
-                    parametros.data
+                    parametros.dataword
                 );
-                corpoResposta = resposta("sucesso", "executar", "Comando executado.");
+                corpoResposta = resposta("sucesso", "executar", "Comando executado.", retornoStrunct.data, retornoStrunct.qx);
             } else {
-                retorno = -1;
-                corpoResposta = resposta("erro", "executar", "JSON invalido.");
+                
+                corpoResposta = resposta("erro", "executar", "JSON invalido.", 0, retornoStrunct.qx);
             }
 
             sprintf(respostaHttp,
@@ -91,7 +91,7 @@ int main() {
                 "Connection: close\r\n"
                 "\r\n"
                 "%s",
-                retorno == -1 ? "400 Bad Request" : "200 OK",
+                retornoStrunct.data > 3 ? "400 Bad Request" : "200 OK",
                 corpoResposta
             );
             send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);
