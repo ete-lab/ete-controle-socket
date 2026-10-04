@@ -13,7 +13,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
     int f_write = 16;
     int f_execute = 25;
     short shortData = 0x0000;
-    int retorno = 99;
+    retorno retornado;
     
     printf("Comando recebido no processarSequencia.\nValor de dados: %s\n", dados);
 
@@ -26,11 +26,11 @@ void processarSequencia(const char *dados, SOCKET cliente) {
       shortData = 0x1987;
       subAddress = 0;
 
-      retorno = execute(&f_write, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d ", retorno);
+      retornado = execute(&f_write, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d ", retornado.data);
 
-      retorno = execute(&f_execute, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d \n", retorno);
+      retornado = execute(&f_execute, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d \n", retornado.data);
 
       status = "sucesso";
       comando = "CONECTAR_BANCOS";
@@ -40,11 +40,11 @@ void processarSequencia(const char *dados, SOCKET cliente) {
       shortData = 0x1807;
       subAddress = 0;
 
-      retorno = execute(&f_write, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d ", retorno);
+      retornado = execute(&f_write, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d ", retornado.data);
 
-      retorno = execute(&f_execute, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d \n", retorno);
+      retornado = execute(&f_execute, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d \n", retornado.data);
 
       status = "sucesso";
       comando = "CONECTAR_BANCO_VERTICAL";
@@ -64,11 +64,11 @@ void processarSequencia(const char *dados, SOCKET cliente) {
       shortData = 0x0000;
       subAddress = 0;
 
-      retorno = execute(&f_write, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d ", retorno);
+      retornado = execute(&f_write, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d ", retornado.data);
 
-      retorno = execute(&f_execute, &subAddress, &shortData);
-      printf("\n[INFO] Retorno na escrita: %d \n", retorno);
+      retornado = execute(&f_execute, &subAddress, &shortData);
+      printf("\n[INFO] retornado na escrita: %d \n", retornado.data);
 
       status = "sucesso";
       comando = "ABORTAR";
@@ -91,7 +91,7 @@ void processarSequencia(const char *dados, SOCKET cliente) {
       "\r\n"
       "%s",
       strcmp(status, "sucesso") == 0 ? "200 OK" : "400 Bad Request",
-      resposta(status, comando, mensagem)
+      resposta(status, comando, mensagem, retornado.data, retornado.qx)
     );
 
     send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);

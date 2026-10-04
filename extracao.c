@@ -34,13 +34,20 @@ static int extrairCrate(cJSON *objeto, int *valor) {
 int extrairParametros(const char *json, struct parametros *parametros) {
     cJSON *raiz;
     int ok;
-    printf("\n[INFO] Extracao de parametros do JSON: %s\n", json);
+    printf("\n[INFO] Extracao de parametros do JSON");
 
-    if (json == NULL || parametros == NULL) return 0;
+    if (json == NULL || parametros == NULL){
+        printf("\n[ERROR] Parametros invalidos");
+        return 0;
+    }
 
     raiz = cJSON_Parse(json);
     if (raiz == NULL || raiz->type != cJSON_Object) {
-        if (raiz != NULL) cJSON_Delete(raiz);
+        printf("\n[ERROR] JSON invalido");
+        if (raiz != NULL){
+            cJSON_Delete(raiz);
+            printf("\n[ERROR] Nao foi possivel parsear o JSON");
+        }
         return 0;
     }
 

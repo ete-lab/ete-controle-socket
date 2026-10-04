@@ -34,5 +34,5 @@ int extrairParametros(const char *json, struct parametros *parametros);
 retorno executar(int branch, int crate, int station, int subaddress, int function, int data);
 void init();
 void inhibt(int *valor);
-int execute(int *funcao, int *subAddress, short *shortData);
+retorno execute(int *funcao, int *subAddress, short *shortData);
 #endif

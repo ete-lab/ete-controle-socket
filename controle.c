@@ -21,6 +21,7 @@ int main() {
     char respostaHttp[1024];
     const char *corpoResposta;
     int valor = 0;
+    // char *string_json;
 
 
     addrLen = sizeof(clienteAddr);
@@ -68,8 +69,7 @@ int main() {
             if (buffer[bytesLidos - 1] == '\n') buffer[bytesLidos - 1] = '\0';
             if (buffer[bytesLidos - 1] == '\r') buffer[bytesLidos - 1] = '\0';
             printf("\n [INFO] Extrair parametros \n");
-            extractJson(buffer, json);
-            printf("\n [INFO] JSON extraído: %s\n", json);
+            extractJson(buffer, json);            
             if (extrairParametros(json, &parametros)) {
                 retornoStrunct = executar(
                     parametros.branch,
