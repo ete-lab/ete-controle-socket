@@ -52,11 +52,11 @@ int extrairParametros(const char *json, struct parametros *parametros) {
     }
 
     ok = extrairInteiroDoObjeto(raiz, "branch", &parametros->branch) &&
-         extrairCrate(raiz, &parametros->crate) &&
+         extrairInteiroDoObjeto(raiz, "crate", &parametros->crate) &&
          extrairInteiroDoObjeto(raiz, "station", &parametros->station) &&
          extrairInteiroDoObjeto(raiz, "subaddress", &parametros->subaddress) &&
          extrairInteiroDoObjeto(raiz, "function", &parametros->function) &&
-         extrairInteiroDoObjeto(raiz, "data", &parametros->dataword);
+         extrairInteiroDoObjeto(raiz, "dataword", &parametros->dataword);
         
     printf("\n[INFO] Extracao de parametros para a struct parametros: branch=%d, crate=%d, station=%d, subaddress=%d, function=%d, data=0x%04d\n", 
         parametros->branch, parametros->crate, parametros->station, parametros->subaddress, parametros->function, parametros->dataword);
