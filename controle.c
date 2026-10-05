@@ -18,13 +18,15 @@ int main()
     char json[512] = {0};
     int bytesLidos;
     struct parametros parametros;
-    retorno retornoStrunct;
+    retorno retornoStruct;
     char respostaHttp[1024];
     const char *corpoResposta;
     int valor = 0;
     char versao[] = "1.0.1-SNAPSHOT";
     // char *string_json;
-
+    char *mensagemRetorno = "";
+    char *statusRetorno = "";
+    char *comandoRetorno = "desconhecido";
     addrLen = sizeof(clienteAddr);
 
     init(); // inicializa CAMAC
@@ -99,35 +101,54 @@ int main()
             
             if (extrairParametros(json, &parametros))
             {
-                retornoStrunct = executar(
+                retornoStruct = executar(
                     parametros.branch,
                     parametros.crate,
                     parametros.station,
                     parametros.subaddress,
                     parametros.function,
-                    parametros.dataword);
-                corpoResposta = resposta("sucesso", "executar", "Comando executado.", retornoStrunct.data, retornoStrunct.qx);
-            }
-            else
-            {
-
-                corpoResposta = resposta("erro", "executar", "JSON invalido.", 0, retornoStrunct.qx);
-            }
-
+                    parametros.dataword
+                );
+                //status, comando, mensagem
+                if(parametros.function >=0 && parametros.function < 16) {
+                    comandoRetorno = "read";
+                } else if(parametros.function >=16 && parametros.function < 25) {
+                    comandoRetorno = "write";
+                } else if(parametros.function == 25) {
+                    comandoRetorno = "execute";
+                } else {
+                    comandoRetorno = "desconhecido";
+                }
+                if (retornoStruct.qx == 0) {
+                    statusRetorno = "Erro Grave / No-X";
+                    mensagemRetorno = "O módulo não respondeu (pode estar ausente ou desligado).";
+                } else if(retornoStruct.qx == 1) {
+                        statusRetorno = "Comando Aceito, Resposta Falsa";
+                        mensagemRetorno = "O módulo existe e entendeu o comando, mas a operação lógica retornou falso.";
+                    } else if(retornoStruct.qx == 3){
+                            statusRetorno = "Sucesso";
+                            mensagemRetorno = "Comando aceito (X=1) e operação realizada com sucesso (Q=1).";
+                        } else {
+                                statusRetorno = "Erro Desconhecido";
+                                mensagemRetorno = "Erro desconhecido.";                    
+                            }
+                corpoResposta = resposta(statusRetorno, comandoRetorno, mensagemRetorno, retornoStruct.data, retornoStruct.qx);
+            } else {
+                corpoResposta = resposta("erro", "executar", "JSON invalido.", 0, retornoStruct.qx);
+                }
             sprintf(respostaHttp,
                     "HTTP/1.1 %s\r\n"
                     "Content-Type: application/json; charset=utf-8\r\n"
                     "Connection: close\r\n"
                     "\r\n"
                     "%s",
-                    retornoStrunct.data > 3 ? "400 Bad Request" : "200 OK",
+                    retornoStruct.data < 0  || retornoStruct.data > 65535 ? "400 Bad Request" : "200 OK",
                     corpoResposta);
             send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);
         }
 
         closesocket(cliente);
     }
-
     closesocket(servidor);
     WSACleanup();
     return 0;
