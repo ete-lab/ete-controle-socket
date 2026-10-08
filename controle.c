@@ -22,11 +22,13 @@ int main()
     char respostaHttp[1024];
     const char *corpoResposta;
     int valor = 0;
-    char versao[] = "1.0.1-SNAPSHOT";
+    char versao[] = "1.0.2-SNAPSHOT";
     // char *string_json;
     char *mensagemRetorno = "";
     char *statusRetorno = "";
     char *comandoRetorno = "desconhecido";
+    short porta = 8080;
+
     addrLen = sizeof(clienteAddr);
 
     init(); // inicializa CAMAC
@@ -48,25 +50,27 @@ int main()
 
     servidorAddr.sin_family = AF_INET;
     servidorAddr.sin_addr.s_addr = INADDR_ANY;
-    servidorAddr.sin_port = htons(8080);
+    servidorAddr.sin_port = htons(porta);
 
     if (bind(servidor, (struct sockaddr *)&servidorAddr, sizeof(servidorAddr)) == SOCKET_ERROR)
     {
-        printf("\n[ERROR] Erro no bind da porta 8080.\n");
+        printf("\n[ERROR] Erro no bind da porta %d.\n", porta);
         closesocket(servidor);
         WSACleanup();
         return 1;
     }
 
     listen(servidor, 3);
-    printf("\n[INFO] Servidor de Hardware (CAMAC) rodando na porta 8080...\n");
+    printf("\n[INFO] Servidor de Hardware (CAMAC) rodando na porta %d...\n", porta);
 
     while (1)
     {
         cliente = accept(servidor, (struct sockaddr *)&clienteAddr, &addrLen);
         if (cliente == INVALID_SOCKET)
         {
-            continue;
+            printf("\n[ERROR] Falha ao aceitar conexao do cliente.\n");
+            WSACleanup();
+            return 1;
         }
 
         printf("[INFO] Conexao recebida de um cliente.\n");
@@ -99,7 +103,7 @@ int main()
 
             extractJson(buffer, json);
             
-            if (extrairParametros(json, &parametros))
+            if (extrairParametros(json, &parametros)) //Se ok 
             {
                 retornoStruct = executar(
                     parametros.branch,
@@ -107,10 +111,10 @@ int main()
                     parametros.station,
                     parametros.subaddress,
                     parametros.function,
-                    parametros.dataword
+                    (short) parametros.dataword
                 );
-                //status, comando, mensagem
-                if(parametros.function >=0 && parametros.function < 16) {
+
+                if(parametros.function >=0 && parametros.function < 7) {
                     comandoRetorno = "read";
                 } else if(parametros.function >=16 && parametros.function < 25) {
                     comandoRetorno = "write";
@@ -119,6 +123,7 @@ int main()
                 } else {
                     comandoRetorno = "desconhecido";
                 }
+
                 if (retornoStruct.qx == 0) {
                     statusRetorno = "Erro Grave / No-X";
                     mensagemRetorno = "O módulo não respondeu (pode estar ausente ou desligado).";

@@ -24,15 +24,15 @@ struct parametros {
 
 typedef struct{ 
     short data;
-	short qx;
+	int qx;
 } retorno;
 
 
 const char *resposta(const char *status, const char *comando, const char *mensagem, const int data, const int qx);
 void processarSequencia(const char *dados, SOCKET cliente);
 int extrairParametros(const char *json, struct parametros *parametros);
-retorno executar(int branch, int crate, int station, int subaddress, int function, int data);
-void init();
+retorno executar(int branch, int crate, int station, int subaddress, int function, short data);
+int extractJson(char *buffer, char *json);
 void inhibt(int *valor);
-retorno execute(int *funcao, int *subAddress, short *shortData);
+//retorno execute(int *funcao, int *subAddress, short *shortData);
 #endif
