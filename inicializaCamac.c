@@ -13,7 +13,7 @@ void init(){
     
     cccc(&ext); //limpa o crate
     
-    ccci(&ext, &false); // false = bloqueio retirado. true = bloqueio ativado 
+    ccci(&ext, &true); // false = bloqueio retirado. true = bloqueio ativado 
     ctci(&ext, &retorno);
 
     if(retorno) printf("\nDataway inhibit nabled - retorno = %d .", retorno);

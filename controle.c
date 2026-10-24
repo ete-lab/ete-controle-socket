@@ -32,6 +32,7 @@ int main()
     addrLen = sizeof(clienteAddr);
 
     init(); // inicializa CAMAC
+    
 
     printf("\nPrograma reles versao: %s\n", versao);
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
