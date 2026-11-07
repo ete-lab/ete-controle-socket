@@ -129,8 +129,8 @@ int main()
                     statusRetorno = "Erro Grave / No-X";
                     mensagemRetorno = "O módulo não respondeu (pode estar ausente ou desligado).";
                 } else if(retornoStruct.qx == 1) {
-                        statusRetorno = "Comando Aceito, Resposta Falsa";
-                        mensagemRetorno = "O módulo existe e entendeu o comando, mas a operação lógica retornou falso.";
+                        statusRetorno = "Comando Aceito";
+                        mensagemRetorno = "O módulo existe e entendeu o comando";
                     } else if(retornoStruct.qx == 3){
                             statusRetorno = "Sucesso";
                             mensagemRetorno = "Comando aceito (X=1) e operação realizada com sucesso (Q=1).";

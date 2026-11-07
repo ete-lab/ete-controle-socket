@@ -25,9 +25,7 @@ retorno executar(int branch, int crate, int station, int subaddress, int functio
     printf("\n[INFO] Retorno da Qx no struct: %d .\n", retornoStruct.qx);
 
     retornoStruct.data = dataword;
-    if(function == 16)
-        printf("\n[INFO] Retorno da funcao %d: %04hx .\n", function, retornoStruct.data);
-    else printf("\n[INFO] Retorno da funcao %d: %04hx .\n", function, retornoStruct.data);
+    printf("\n[INFO] Valor no registrador: %04hx .\n", retornoStruct.data);
 
     return retornoStruct;
 }
