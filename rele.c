@@ -148,7 +148,7 @@ int main()
                     "Connection: close\r\n"
                     "\r\n"
                     "%s",
-                    retornoStruct.data < 0  || retornoStruct.data > 65535 ? "400 Bad Request" : "200 OK",
+                    retornoStruct.data < -1  || retornoStruct.data > 65535 ? "400 Bad Request" : "200 OK",
                     corpoResposta);
             send(cliente, respostaHttp, (int)strlen(respostaHttp), 0);
         }
