@@ -2,7 +2,7 @@
 #include "comum.h"
 #include "esone.h"
 
-retorno executar(int branch, int crate, int station, int subaddress, int function, short dataword) {
+retorno executar(int branch, int crate, int station, int subaddress, int function, unsigned short dataword) {
     
     retorno retornoStruct;
     int qx;
@@ -16,7 +16,7 @@ retorno executar(int branch, int crate, int station, int subaddress, int functio
 
 
     printf("\n[INFO] Executando funcao cssa %d com subaddress %d e data %04hx.\n", function, subaddress, dataword);
-    cssa(&function, &ext, &dataword, &qx);
+    cssa(&function, &ext, (short *)&dataword, &qx);
     printf("\n[INFO] Funcao %d executada com sucesso.\n", function);
 
 
@@ -24,7 +24,6 @@ retorno executar(int branch, int crate, int station, int subaddress, int functio
     retornoStruct.qx = qx;
     printf("\n[INFO] Retorno da Qx no struct: %d .\n", retornoStruct.qx);
 
-    retornoStruct.data = dataword;
     printf("\n[INFO] Valor no registrador: %04hx .\n", retornoStruct.data);
 
     return retornoStruct;

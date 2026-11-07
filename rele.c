@@ -112,7 +112,7 @@ int main()
                     parametros.station,
                     parametros.subaddress,
                     parametros.function,
-                    (short) parametros.dataword
+                    (unsigned short) parametros.dataword
                 );
 
                 if(parametros.function >=0 && parametros.function < 7) {
