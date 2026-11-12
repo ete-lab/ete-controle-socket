@@ -10,8 +10,9 @@ static int extrairInteiroDoObjeto(cJSON *objeto, const char *nome, int *valor) {
     if (objeto == NULL || nome == NULL || valor == NULL) return 0;
 
     item = cJSON_GetObjectItem(objeto, nome);
+    printf("\n[INFO] Tentando extrair parametro '%s' do JSON", nome);
     if (item == NULL || item->type != cJSON_Number) return 0;
-
+    printf("\n[INFO] Extracao do parametro '%s': \nvalor = %d", nome, item->valueint);
     *valor = item->valueint;
     return 1;
 }

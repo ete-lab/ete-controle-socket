@@ -3,7 +3,7 @@
 #include <string.h>
 #include "comum.h"
 #include "esone.h"
-#include "cJSON.h"
+
 
 struct camac_ext ext;
 
@@ -22,7 +22,7 @@ int main()
     char respostaHttp[1024];
     const char *corpoResposta;
     int valor = 0;
-    char versao[] = "1.0.2-SNAPSHOT";
+    char versao[] = "1.0.5-SNAPSHOT";
     // char *string_json;
     char *mensagemRetorno = "";
     char *statusRetorno = "";
@@ -32,7 +32,12 @@ int main()
     addrLen = sizeof(clienteAddr);
 
     init(); // inicializa CAMAC
-    
+    parametros.branch = BRANCH;
+    parametros.crate = CRATE;
+    parametros.station = 0;
+    parametros.subaddress = 0;
+    parametros.function = 0;
+    parametros.dataword = 0;
 
     printf("\nPrograma reles versao: %s\n", versao);
     if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
